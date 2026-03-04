@@ -78,8 +78,24 @@ const PricesSection = () => {
     addItem({ name, price });
     toast({
       title: "Добавлено в корзину",
-      description: name,
+      description: `${name} — нажми чтобы открыть`,
+      action: undefined,
     });
+    // Dispatch event so toast click opens cart
+    setTimeout(() => {
+      const toastEl = document.querySelector('[data-state="open"][role="status"]');
+      if (toastEl) {
+        (toastEl as HTMLElement).style.cursor = "pointer";
+        (toastEl as HTMLElement).onclick = () => {
+          window.dispatchEvent(new CustomEvent("open-cart"));
+        };
+      }
+    }, 50);
+  };
+
+  const handleToastClick = () => {
+    const event = new CustomEvent("open-cart");
+    window.dispatchEvent(event);
   };
 
   return (

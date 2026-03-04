@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -12,6 +12,15 @@ import woksoundLogo from "@/assets/woksound-logo.png";
 const Index = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerTab, setDrawerTab] = useState<"contact" | "cart">("contact");
+
+  useEffect(() => {
+    const handler = () => {
+      setDrawerTab("cart");
+      setDrawerOpen(true);
+    };
+    window.addEventListener("open-cart", handler);
+    return () => window.removeEventListener("open-cart", handler);
+  }, []);
 
   const openContact = () => {
     setDrawerTab("contact");

@@ -198,8 +198,8 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
 
                   <div>
                     <label className="font-heading text-xs mb-2 block tracking-wider">ВРЕМЯ</label>
-                    <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    <div className="relative flex items-center">
+                      <Clock className="absolute left-3 w-4 h-4 text-muted-foreground pointer-events-none shrink-0" />
                       <select
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
