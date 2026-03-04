@@ -7,7 +7,7 @@ const FooterSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div>
-            <img src={woksoundLogo} alt="ВОК САУНД" className="h-20 w-auto mb-6 invert" />
+            <img src={woksoundLogo} alt="ВОК САУНД" className="h-20 w-auto mb-6" />
             <p className="font-hand text-xl text-background/60 max-w-sm leading-relaxed">
               Андеграунд-студия для тех, кто делает музыку всерьез. Никакой попсы в подходе — только результат.
             </p>
@@ -35,13 +35,13 @@ const FooterSection = () => {
             </a>
 
             <a
-              href="https://t.me/woksound"
+              href="https://t.me/woksoundmgmt"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 hover:opacity-60 transition-opacity"
             >
               <Send className="w-5 h-5 shrink-0" strokeWidth={2} />
-              Telegram
+              @woksoundmgmt
             </a>
           </div>
         </div>

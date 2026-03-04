@@ -21,7 +21,7 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
 
     setLoading(true);
 
-    const text = `🎤 Новая заявка — ВОК САУНД\n\n👤 Имя: ${form.name}\n📱 Контакт: ${form.contact}\n📝 Проект: ${form.project}`;
+    const text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\nПроект: ${form.project}`;
 
     try {
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -39,7 +39,7 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
       setForm({ name: "", contact: "", project: "" });
       onClose();
       toast({
-        title: "Заявка улетела! 🚀",
+        title: "Заявка улетела!",
         description: "Скоро наберем.",
       });
     } catch {
@@ -80,7 +80,7 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
           </div>
 
           <p className="font-hand text-lg text-muted-foreground mb-6">
-            Заполни форму и мы свяжемся с тобой ✌️
+            Заполни форму и мы свяжемся с тобой
           </p>
 
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
@@ -129,7 +129,7 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
           </form>
 
           <p className="font-hand text-base text-muted-foreground mt-4 text-center">
-            Ответим в течение пары часов ✌️
+            Ответим в течение пары часов
           </p>
         </div>
       </div>

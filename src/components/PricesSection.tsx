@@ -1,9 +1,15 @@
+import { useState } from "react";
+import { Send } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useToast } from "@/hooks/use-toast";
+
+const TELEGRAM_BOT_TOKEN = "8738225501:AAH_TliE5iP30bQo9kWDCD791cUJPN3l2dQ";
+const TELEGRAM_CHAT_ID = "423749724";
 
 const priceCategories = [
   {
@@ -67,6 +73,39 @@ const priceCategories = [
 ];
 
 const PricesSection = () => {
+  const { toast } = useToast();
+  const [sending, setSending] = useState<string | null>(null);
+
+  const handleOrder = async (serviceName: string, servicePrice: string) => {
+    const key = `${serviceName}-${servicePrice}`;
+    setSending(key);
+
+    const text = `Заказ услуги — ВОК САУНД\n\nУслуга: ${serviceName}\nЦена: ${servicePrice}`;
+
+    try {
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text,
+        }),
+      });
+      toast({
+        title: "Заказ отправлен!",
+        description: `${serviceName} — скоро свяжемся.`,
+      });
+    } catch {
+      toast({
+        title: "Ошибка",
+        description: "Попробуйте еще раз.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(null);
+    }
+  };
+
   return (
     <section id="prices" className="py-20 bg-foreground text-background" style={{ borderRadius: "40px 40px 0 0" }}>
       <div className="container mx-auto px-4">
@@ -90,24 +129,35 @@ const PricesSection = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 pb-3">
-                    {cat.items.map((item, j) => (
-                      <div
-                        key={j}
-                        className="flex items-start justify-between gap-4 border-b border-background/10 pb-3 last:border-0"
-                      >
-                        <div className="flex-1">
-                          <span className="font-body font-bold text-sm text-background">
-                            {item.name}
+                    {cat.items.map((item, j) => {
+                      const key = `${item.name}-${item.price}`;
+                      return (
+                        <div
+                          key={j}
+                          className="flex items-center justify-between gap-4 border-b border-background/10 pb-3 last:border-0"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <span className="font-body font-bold text-sm text-background">
+                              {item.name}
+                            </span>
+                            <p className="font-hand text-base text-background/50 mt-0.5">
+                              {item.desc}
+                            </p>
+                          </div>
+                          <span className="font-heading text-lg text-background whitespace-nowrap">
+                            {item.price}
                           </span>
-                          <p className="font-hand text-base text-background/50 mt-0.5">
-                            {item.desc}
-                          </p>
+                          <button
+                            onClick={() => handleOrder(item.name, item.price)}
+                            disabled={sending === key}
+                            className="shrink-0 w-9 h-9 rounded-full border-2 border-background/40 flex items-center justify-center hover:bg-background hover:text-foreground transition-colors disabled:opacity-50"
+                            title={`Заказать ${item.name}`}
+                          >
+                            <Send className="w-3.5 h-3.5" strokeWidth={2} />
+                          </button>
                         </div>
-                        <span className="font-heading text-lg text-background whitespace-nowrap">
-                          {item.price}
-                        </span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </AccordionContent>
               </AccordionItem>
