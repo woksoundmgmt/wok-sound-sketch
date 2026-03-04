@@ -13,7 +13,7 @@ const FooterSection = () => {
             </p>
           </div>
 
-          <div className="space-y-4 font-mono text-sm">
+          <div className="space-y-4 font-body text-sm">
             <a
               href="https://yandex.ru/maps/?text=улица+Героя+Владислава+Посадского+42"
               target="_blank"

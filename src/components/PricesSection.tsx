@@ -96,7 +96,7 @@ const PricesSection = () => {
                         className="flex items-start justify-between gap-4 border-b border-background/10 pb-3 last:border-0"
                       >
                         <div className="flex-1">
-                          <span className="font-mono font-bold text-sm text-background">
+                          <span className="font-body font-bold text-sm text-background">
                             {item.name}
                           </span>
                           <p className="font-hand text-base text-background/50 mt-0.5">

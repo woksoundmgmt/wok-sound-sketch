@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
+import StaffSection from "@/components/StaffSection";
 import PricesSection from "@/components/PricesSection";
 import FooterSection from "@/components/FooterSection";
 import BookingDrawer from "@/components/BookingDrawer";
@@ -14,6 +15,7 @@ const Index = () => {
       <Header onBookClick={() => setDrawerOpen(true)} />
       <HeroSection onBookClick={() => setDrawerOpen(true)} />
       <ServicesSection />
+      <StaffSection />
       <PricesSection />
       <FooterSection />
       <BookingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

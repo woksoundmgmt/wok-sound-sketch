@@ -19,9 +19,10 @@ const Header = ({ onBookClick }: HeaderProps) => {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
 
-        <nav className="hidden md:flex items-center gap-6 font-mono text-sm font-bold uppercase tracking-wider">
+        <nav className="hidden md:flex items-center gap-6 font-body text-sm font-bold uppercase tracking-wider">
           {[
             ["services", "УСЛУГИ"],
+            ["staff", "СТАФФ"],
             ["prices", "ЦЕНЫ"],
             ["contacts", "КОНТАКТЫ"],
           ].map(([id, label]) => (

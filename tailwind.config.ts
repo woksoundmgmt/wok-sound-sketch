@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Archivo Black"', 'Impact', 'sans-serif'],
-        mono: ['"Roboto Mono"', 'monospace'],
-        hand: ['"Caveat"', 'cursive'],
+        heading: ['"Unbounded"', 'sans-serif'],
+        body: ['"Nunito"', 'sans-serif'],
+        hand: ['"Permanent Marker"', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",

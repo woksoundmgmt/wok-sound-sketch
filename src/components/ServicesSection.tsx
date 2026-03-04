@@ -30,7 +30,7 @@ const ServicesSection = () => {
         <h2 className="font-heading text-4xl md:text-6xl text-center mb-4">
           УСЛУГИ
         </h2>
-        <p className="font-hand text-xl text-center text-muted-foreground mb-14">
+        <p className="font-hand text-xl text-center text-muted-foreground mb-14 lowercase">
           всё, что нужно для твоего трека
         </p>
 
