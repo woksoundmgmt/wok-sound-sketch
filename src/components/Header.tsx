@@ -1,10 +1,15 @@
+import { ShoppingCart } from "lucide-react";
 import woksoundLogo from "@/assets/woksound-logo.png";
+import { useCart } from "@/contexts/CartContext";
 
 interface HeaderProps {
   onBookClick: () => void;
+  onCartClick: () => void;
 }
 
-const Header = ({ onBookClick }: HeaderProps) => {
+const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
+  const { items } = useCart();
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -37,12 +42,26 @@ const Header = ({ onBookClick }: HeaderProps) => {
           ))}
         </nav>
 
-        <button
-          onClick={onBookClick}
-          className="btn-drawn px-5 py-2 font-heading text-sm tracking-wider"
-        >
-          ЗАПИСАТЬСЯ
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onCartClick}
+            className="relative w-10 h-10 rounded-full drawn-border flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+          >
+            <ShoppingCart className="w-4 h-4" strokeWidth={2} />
+            {items.length > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-foreground text-background text-[10px] font-bold flex items-center justify-center border-2 border-background">
+                {items.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={onBookClick}
+            className="btn-drawn px-5 py-2 font-heading text-sm tracking-wider"
+          >
+            ЗАПИСАТЬСЯ
+          </button>
+        </div>
       </div>
     </header>
   );
