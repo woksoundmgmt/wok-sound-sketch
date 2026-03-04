@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Clock } from "lucide-react";
 import woksoundLogo from "@/assets/woksound-logo.png";
 
 const FooterSection = () => {
@@ -43,6 +43,14 @@ const FooterSection = () => {
               <Send className="w-5 h-5 shrink-0" strokeWidth={2} />
               @woksoundmgmt
             </a>
+
+            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-background/20">
+              <Clock className="w-5 h-5 shrink-0" strokeWidth={2} />
+              <div>
+                <p className="font-heading text-xs tracking-wider mb-1">ГРАФИК РАБОТЫ</p>
+                <p>Пн — Вс: 10:00 — 22:00</p>
+              </div>
+            </div>
           </div>
         </div>
 
