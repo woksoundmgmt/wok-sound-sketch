@@ -15,7 +15,8 @@ const Header = ({ onBookClick }: HeaderProps) => {
         <img
           src={woksoundLogo}
           alt="ВОК САУНД"
-          className="h-12 w-auto cursor-pointer"
+          className="h-12 w-auto cursor-pointer mix-blend-multiply dark:mix-blend-screen"
+          style={{ background: "transparent" }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
 
