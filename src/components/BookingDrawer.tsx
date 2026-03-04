@@ -1,46 +1,54 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 interface BookingDrawerProps {
   open: boolean;
   onClose: () => void;
+  initialTab?: "contact" | "cart";
 }
 
 const TELEGRAM_BOT_TOKEN = "8738225501:AAH_TliE5iP30bQo9kWDCD791cUJPN3l2dQ";
 const TELEGRAM_CHAT_ID = "423749724";
 
-const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
+const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerProps) => {
   const { toast } = useToast();
+  const { items, removeItem, clearCart, total } = useCart();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", contact: "", project: "" });
+  const [form, setForm] = useState({ name: "", contact: "" });
+  const [tab, setTab] = useState<"contact" | "cart">(initialTab);
+
+  // Sync tab when drawer opens
+  const activeTab = open ? (initialTab === "cart" ? "cart" : tab) : tab;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.contact || !form.project) return;
+    if (!form.name || !form.contact) return;
 
     setLoading(true);
 
-    const text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\nПроект: ${form.project}`;
+    let text = "";
+    if (activeTab === "cart" && items.length > 0) {
+      const servicesList = items.map((i) => `  - ${i.name}: ${i.price}`).join("\n");
+      text = `Заказ услуг — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\n\nУслуги:\n${servicesList}\n\nИтого: ${total.toLocaleString("ru-RU")}`;
+    } else {
+      text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}`;
+    }
 
     try {
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text,
-          parse_mode: "HTML",
-        }),
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text }),
       });
 
-      console.log("Email stub: would send to woksoundmgmt@gmail.com", form);
-
-      setForm({ name: "", contact: "", project: "" });
+      setForm({ name: "", contact: "" });
+      if (activeTab === "cart") clearCart();
       onClose();
       toast({
-        title: "Заявка улетела!",
-        description: "Скоро наберем.",
+        title: activeTab === "cart" ? "Заказ отправлен!" : "Заявка отправлена!",
+        description: "Скоро свяжемся.",
       });
     } catch {
       toast({
@@ -68,9 +76,12 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
         }`}
         style={{ borderRadius: "24px 0 0 24px" }}
       >
-        <div className="flex flex-col h-full p-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="font-heading text-2xl">ЗАПИСАТЬСЯ</h2>
+        <div className="flex flex-col h-full p-6 overflow-y-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-heading text-2xl">
+              {activeTab === "cart" ? "КОРЗИНА" : "ЗАПИСАТЬСЯ"}
+            </h2>
             <button
               onClick={onClose}
               className="w-10 h-10 rounded-full drawn-border flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
@@ -79,9 +90,74 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
             </button>
           </div>
 
-          <p className="font-hand text-lg text-muted-foreground mb-6">
-            Заполни форму и мы свяжемся с тобой
-          </p>
+          {/* Tabs */}
+          <div className="flex gap-2 mb-6">
+            <button
+              onClick={() => setTab("contact")}
+              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider border-2 transition-colors ${
+                activeTab === "contact"
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-foreground/20 text-foreground hover:border-foreground/40"
+              }`}
+            >
+              СВЯЗАТЬСЯ
+            </button>
+            <button
+              onClick={() => setTab("cart")}
+              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider border-2 transition-colors relative ${
+                activeTab === "cart"
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-foreground/20 text-foreground hover:border-foreground/40"
+              }`}
+            >
+              ЗАКАЗ
+              {items.length > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-foreground text-background text-[10px] font-bold flex items-center justify-center border-2 border-background">
+                  {items.length}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Cart items */}
+          {activeTab === "cart" && (
+            <div className="mb-4">
+              {items.length === 0 ? (
+                <p className="font-hand text-lg text-muted-foreground text-center py-8">
+                  Корзина пуста — добавь услуги из прайса
+                </p>
+              ) : (
+                <div className="space-y-2 mb-4">
+                  {items.map((item, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between gap-3 drawn-border px-3 py-2 rounded-xl"
+                    >
+                      <span className="font-body text-sm flex-1">{item.name}</span>
+                      <span className="font-heading text-sm whitespace-nowrap">{item.price}</span>
+                      <button
+                        onClick={() => removeItem(i)}
+                        className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+                      </button>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center pt-2 border-t-2 border-foreground/10">
+                    <span className="font-heading text-sm">ИТОГО</span>
+                    <span className="font-heading text-xl">{total.toLocaleString("ru-RU")}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Contact info */}
+          {activeTab === "contact" && (
+            <p className="font-hand text-lg text-muted-foreground mb-4">
+              Заполни форму и мы свяжемся с тобой
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
             <div>
@@ -108,23 +184,16 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
               />
             </div>
 
-            <div className="flex-1">
-              <label className="font-heading text-xs mb-2 block tracking-wider">РАССКАЖИ ПРО ПРОЕКТ</label>
-              <textarea
-                required
-                value={form.project}
-                onChange={(e) => setForm({ ...form, project: e.target.value })}
-                className="w-full h-32 drawn-input resize-none"
-                placeholder="Жанр, референсы, сроки..."
-              />
-            </div>
-
             <button
               type="submit"
-              disabled={loading}
-              className="btn-drawn font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto"
+              disabled={loading || (activeTab === "cart" && items.length === 0)}
+              className="btn-drawn font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto disabled:opacity-40"
             >
-              {loading ? "ОТПРАВЛЯЕМ..." : "ОТПРАВИТЬ ЗАЯВКУ"}
+              {loading
+                ? "ОТПРАВЛЯЕМ..."
+                : activeTab === "cart"
+                ? "ОФОРМИТЬ ЗАКАЗ"
+                : "ОТПРАВИТЬ ЗАЯВКУ"}
             </button>
           </form>
 
