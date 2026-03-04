@@ -10,7 +10,7 @@ const Header = ({ onBookClick }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b-3 border-foreground">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
         <img
           src={woksoundLogo}
@@ -28,7 +28,7 @@ const Header = ({ onBookClick }: HeaderProps) => {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="hover:sketch-underline transition-all"
+              className="hover:opacity-60 transition-opacity"
             >
               {label}
             </button>
@@ -37,7 +37,7 @@ const Header = ({ onBookClick }: HeaderProps) => {
 
         <button
           onClick={onBookClick}
-          className="btn-invert sketch-border px-5 py-2 font-heading text-sm tracking-wider"
+          className="btn-drawn px-5 py-2 font-heading text-sm tracking-wider"
         >
           ЗАПИСАТЬСЯ
         </button>

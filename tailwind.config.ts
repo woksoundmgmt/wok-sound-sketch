@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         heading: ['"Archivo Black"', 'Impact', 'sans-serif'],
         mono: ['"Roboto Mono"', 'monospace'],
+        hand: ['"Caveat"', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
