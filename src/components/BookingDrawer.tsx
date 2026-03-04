@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { X, Trash2 } from "lucide-react";
+import { X, Trash2, CalendarIcon, Clock } from "lucide-react";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface BookingDrawerProps {
   open: boolean;
@@ -12,14 +17,20 @@ interface BookingDrawerProps {
 const TELEGRAM_BOT_TOKEN = "8738225501:AAH_TliE5iP30bQo9kWDCD791cUJPN3l2dQ";
 const TELEGRAM_CHAT_ID = "423749724";
 
+const WORK_HOURS = Array.from({ length: 13 }, (_, i) => {
+  const h = i + 10;
+  return `${h}:00`;
+});
+
 const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerProps) => {
   const { toast } = useToast();
   const { items, removeItem, clearCart, total } = useCart();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", contact: "" });
+  const [form, setForm] = useState({ name: "", contact: "", interest: "" });
   const [tab, setTab] = useState<"contact" | "cart">(initialTab);
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedTime, setSelectedTime] = useState("");
 
-  // Sync tab when drawer opens
   const activeTab = open ? (initialTab === "cart" ? "cart" : tab) : tab;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,9 +42,11 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
     let text = "";
     if (activeTab === "cart" && items.length > 0) {
       const servicesList = items.map((i) => `  - ${i.name}: ${i.price}`).join("\n");
-      text = `Заказ услуг — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\n\nУслуги:\n${servicesList}\n\nИтого: ${total.toLocaleString("ru-RU")}`;
+      const dateStr = selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: ru }) : "не указана";
+      const timeStr = selectedTime || "не указано";
+      text = `Заказ услуг — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\n\nДата: ${dateStr}\nВремя: ${timeStr}\n\nУслуги:\n${servicesList}\n\nИтого: ${total.toLocaleString("ru-RU")}`;
     } else {
-      text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}`;
+      text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\nИнтересует: ${form.interest || "не указано"}`;
     }
 
     try {
@@ -43,7 +56,9 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
         body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text }),
       });
 
-      setForm({ name: "", contact: "" });
+      setForm({ name: "", contact: "", interest: "" });
+      setSelectedDate(undefined);
+      setSelectedTime("");
       if (activeTab === "cart") clearCart();
       onClose();
       toast({
@@ -80,7 +95,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-heading text-2xl">
-              {activeTab === "cart" ? "КОРЗИНА" : "ЗАПИСАТЬСЯ"}
+              {activeTab === "cart" ? "КОРЗИНА" : "СВЯЗАТЬСЯ"}
             </h2>
             <button
               onClick={onClose}
@@ -149,6 +164,56 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                   </div>
                 </div>
               )}
+
+              {/* Date & Time pickers */}
+              {items.length > 0 && (
+                <div className="space-y-4 mb-4">
+                  <div>
+                    <label className="font-heading text-xs mb-2 block tracking-wider">ДАТА ЗАПИСИ</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          className={cn(
+                            "w-full drawn-input flex items-center gap-2 text-left",
+                            !selectedDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="w-4 h-4 shrink-0" />
+                          {selectedDate
+                            ? format(selectedDate, "d MMMM yyyy", { locale: ru })
+                            : "Выбери дату"}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 z-[80]" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                          className={cn("p-3 pointer-events-auto")}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div>
+                    <label className="font-heading text-xs mb-2 block tracking-wider">ВРЕМЯ</label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                      <select
+                        value={selectedTime}
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                        className="w-full drawn-input pl-9 appearance-none cursor-pointer"
+                      >
+                        <option value="">Выбери время</option>
+                        {WORK_HOURS.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -183,6 +248,19 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                 placeholder="@username или +7..."
               />
             </div>
+
+            {activeTab === "contact" && (
+              <div>
+                <label className="font-heading text-xs mb-2 block tracking-wider">ЧТО ВАС ИНТЕРЕСУЕТ</label>
+                <textarea
+                  value={form.interest}
+                  onChange={(e) => setForm({ ...form, interest: e.target.value })}
+                  className="w-full drawn-input min-h-[80px] resize-none"
+                  placeholder="Запись, сведение, мастеринг..."
+                  rows={3}
+                />
+              </div>
+            )}
 
             <button
               type="submit"
