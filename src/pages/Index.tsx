@@ -5,14 +5,12 @@ import ServicesSection from "@/components/ServicesSection";
 import PricesSection from "@/components/PricesSection";
 import FooterSection from "@/components/FooterSection";
 import BookingDrawer from "@/components/BookingDrawer";
-import FloatingElements from "@/components/FloatingElements";
 
 const Index = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
-      <FloatingElements />
+    <div className="min-h-screen bg-background text-foreground">
       <Header onBookClick={() => setDrawerOpen(true)} />
       <HeroSection onBookClick={() => setDrawerOpen(true)} />
       <ServicesSection />

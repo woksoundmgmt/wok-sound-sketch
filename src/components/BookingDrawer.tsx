@@ -24,7 +24,6 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
     const text = `🎤 Новая заявка — ВОК САУНД\n\n👤 Имя: ${form.name}\n📱 Контакт: ${form.contact}\n📝 Проект: ${form.project}`;
 
     try {
-      // Send to Telegram
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,7 +34,6 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
         }),
       });
 
-      // Email stub
       console.log("Email stub: would send to woksoundmgmt@gmail.com", form);
 
       setForm({ name: "", contact: "", project: "" });
@@ -57,69 +55,66 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
 
   return (
     <>
-      {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-[60] bg-foreground/50"
+          className="fixed inset-0 z-[60] bg-foreground/40 backdrop-blur-sm"
           onClick={onClose}
         />
       )}
 
-      {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-background border-l-4 border-foreground transform transition-transform duration-300 ${
+        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-background border-l-2 border-foreground/20 transform transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
+        style={{ borderRadius: "24px 0 0 24px" }}
       >
         <div className="flex flex-col h-full p-6">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-heading text-2xl">ЗАПИСАТЬСЯ</h2>
             <button
               onClick={onClose}
-              className="w-10 h-10 sketch-border-thin flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+              className="w-10 h-10 rounded-full drawn-border flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
             >
-              <X className="w-5 h-5" strokeWidth={3} />
+              <X className="w-4 h-4" strokeWidth={2.5} />
             </button>
           </div>
 
-          {/* Decorative wavy line */}
-          <svg width="100%" height="8" className="mb-8">
-            <path d="M0,4 Q25,0 50,4 Q75,8 100,4 Q125,0 150,4 Q175,8 200,4 Q225,0 250,4 Q275,8 300,4 Q325,0 350,4" fill="none" stroke="currentColor" strokeWidth="2" />
-          </svg>
+          <p className="font-hand text-lg text-muted-foreground mb-6">
+            Заполни форму и мы свяжемся с тобой ✌️
+          </p>
 
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
             <div>
-              <label className="font-heading text-sm mb-2 block">ТВОЕ ИМЯ *</label>
+              <label className="font-heading text-xs mb-2 block tracking-wider">ТВОЕ ИМЯ</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border-3 border-foreground bg-transparent px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[3px_3px_0_hsl(var(--foreground))] transition-shadow"
+                className="w-full drawn-input"
                 placeholder="Как тебя зовут?"
               />
             </div>
 
             <div>
-              <label className="font-heading text-sm mb-2 block">TELEGRAM ИЛИ ТЕЛЕФОН *</label>
+              <label className="font-heading text-xs mb-2 block tracking-wider">TELEGRAM ИЛИ ТЕЛЕФОН</label>
               <input
                 type="text"
                 required
                 value={form.contact}
                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                className="w-full border-3 border-foreground bg-transparent px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[3px_3px_0_hsl(var(--foreground))] transition-shadow"
+                className="w-full drawn-input"
                 placeholder="@username или +7..."
               />
             </div>
 
             <div className="flex-1">
-              <label className="font-heading text-sm mb-2 block">РАССКАЖИ ПРО ПРОЕКТ *</label>
+              <label className="font-heading text-xs mb-2 block tracking-wider">РАССКАЖИ ПРО ПРОЕКТ</label>
               <textarea
                 required
                 value={form.project}
                 onChange={(e) => setForm({ ...form, project: e.target.value })}
-                className="w-full h-32 border-3 border-foreground bg-transparent px-4 py-3 font-mono text-sm resize-none focus:outline-none focus:shadow-[3px_3px_0_hsl(var(--foreground))] transition-shadow"
+                className="w-full h-32 drawn-input resize-none"
                 placeholder="Жанр, референсы, сроки..."
               />
             </div>
@@ -127,17 +122,14 @@ const BookingDrawer = ({ open, onClose }: BookingDrawerProps) => {
             <button
               type="submit"
               disabled={loading}
-              className="relative group mt-auto"
+              className="btn-drawn font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto"
             >
-              <span className="relative z-10 block btn-invert sketch-border font-heading text-base px-6 py-4 tracking-wider text-center w-full">
-                {loading ? "ОТПРАВЛЯЕМ..." : "ОТПРАВИТЬ ЗАЯВКУ"}
-              </span>
+              {loading ? "ОТПРАВЛЯЕМ..." : "ОТПРАВИТЬ ЗАЯВКУ"}
             </button>
           </form>
 
-          {/* Bottom deco */}
-          <p className="font-mono text-[10px] text-muted-foreground mt-4 text-center">
-            Ответим в течение пары часов ✕
+          <p className="font-hand text-base text-muted-foreground mt-4 text-center">
+            Ответим в течение пары часов ✌️
           </p>
         </div>
       </div>

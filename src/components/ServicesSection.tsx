@@ -25,31 +25,23 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="py-20 relative">
+    <section id="services" className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="font-heading text-4xl md:text-6xl text-center mb-16 relative inline-block w-full">
-          <span className="relative">
-            УСЛУГИ
-            <svg className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32" height="6" viewBox="0 0 120 6">
-              <path d="M0,3 Q20,0 40,3 Q60,6 80,3 Q100,0 120,3" fill="none" stroke="currentColor" strokeWidth="2.5" />
-            </svg>
-          </span>
+        <h2 className="font-heading text-4xl md:text-6xl text-center mb-4">
+          УСЛУГИ
         </h2>
+        <p className="font-hand text-xl text-center text-muted-foreground mb-14">
+          всё, что нужно для твоего трека
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, i) => (
-            <div
-              key={service.title}
-              className="sketch-card p-6 group"
-              style={{ animationDelay: `${i * 100}ms` }}
-            >
-              {/* Icon in sketchy circle */}
-              <div className="w-16 h-16 rounded-full sketch-border-thin flex items-center justify-center mb-4 group-hover:bg-foreground group-hover:text-background transition-colors">
-                <service.icon className="w-7 h-7" strokeWidth={2.5} />
+          {services.map((service) => (
+            <div key={service.title} className="drawn-card p-6">
+              <div className="w-14 h-14 rounded-full drawn-border flex items-center justify-center mb-4">
+                <service.icon className="w-6 h-6" strokeWidth={2} />
               </div>
-
               <h3 className="font-heading text-xl mb-3">{service.title}</h3>
-              <p className="font-mono text-xs leading-relaxed text-muted-foreground">
+              <p className="font-hand text-lg leading-relaxed text-muted-foreground">
                 {service.description}
               </p>
             </div>
