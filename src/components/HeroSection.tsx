@@ -1,5 +1,3 @@
-import headCharacter from "@/assets/head-character.png";
-
 interface HeroProps {
   onBookClick: () => void;
 }
@@ -8,15 +6,6 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20">
       <div className="container mx-auto px-4 text-center relative z-10">
-        {/* Character */}
-        <div className="flex justify-center mb-8">
-          <img
-            src={headCharacter}
-            alt="WOK SOUND character"
-            className="w-36 h-36 md:w-52 md:h-52 object-contain"
-          />
-        </div>
-
         <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-6 tracking-tight">
           ДЕЛАЕМ ЗВУК,
           <br />
