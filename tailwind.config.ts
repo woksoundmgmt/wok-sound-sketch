@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         heading: ['"Unbounded"', 'sans-serif'],
         body: ['"Nunito"', 'sans-serif'],
-        hand: ['"Permanent Marker"', 'cursive'],
+        hand: ['"Comfortaa"', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
