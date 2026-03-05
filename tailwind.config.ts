@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Unbounded"', 'sans-serif'],
-        body: ['"Nunito"', 'sans-serif'],
-        hand: ['"Comfortaa"', 'cursive'],
+        heading: ['"Manrope"', 'sans-serif'],
+        body: ['"Golos Text"', 'sans-serif'],
+        hand: ['"Golos Text"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
