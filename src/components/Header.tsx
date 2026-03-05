@@ -15,16 +15,16 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-panel" style={{ borderRadius: "0 0 20px 20px" }}>
-      <div className="container mx-auto flex items-center justify-between py-3 px-4">
+    <header className="fixed top-4 left-4 right-4 z-50 glass-panel px-6 py-3">
+      <div className="flex items-center justify-between">
         <img
           src={woksoundLogo}
           alt="ВОК САУНД"
-          className="h-12 w-auto cursor-pointer brightness-0 invert opacity-90"
+          className="h-10 w-auto cursor-pointer brightness-0 invert opacity-90"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
 
-        <nav className="hidden md:flex items-center gap-6 font-body text-sm font-bold uppercase tracking-wider">
+        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wider">
           {[
             ["services", "УСЛУГИ"],
             ["staff", "СТАФФ"],
@@ -34,7 +34,7 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+              className="text-foreground/60 hover:text-foreground transition-colors duration-300"
             >
               {label}
             </button>
@@ -56,7 +56,7 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
 
           <button
             onClick={onBookClick}
-            className="btn-glass px-5 py-2 font-heading text-sm tracking-wider"
+            className="btn-glass px-5 py-2 text-sm tracking-wider font-bold uppercase"
           >
             ЗАПИСАТЬСЯ
           </button>
