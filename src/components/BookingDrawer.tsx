@@ -80,13 +80,13 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
     <>
       {open && (
         <div
-          className="fixed inset-0 z-[60] bg-foreground/40 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md"
           onClick={onClose}
         />
       )}
 
       <div
-        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-background border-l-2 border-foreground/20 transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md glass-panel-strong transform transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ borderRadius: "24px 0 0 24px" }}
@@ -99,7 +99,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
             </h2>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full drawn-border flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+              className="w-10 h-10 rounded-full btn-glass-ghost flex items-center justify-center"
             >
               <X className="w-4 h-4" strokeWidth={2.5} />
             </button>
@@ -109,25 +109,25 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
           <div className="flex gap-2 mb-6">
             <button
               onClick={() => setTab("contact")}
-              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider border-2 transition-colors ${
+              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider transition-all duration-300 ${
                 activeTab === "contact"
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-foreground/20 text-foreground hover:border-foreground/40"
+                  ? "btn-glass"
+                  : "btn-glass-ghost"
               }`}
             >
               СВЯЗАТЬСЯ
             </button>
             <button
               onClick={() => setTab("cart")}
-              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider border-2 transition-colors relative ${
+              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider transition-all duration-300 relative ${
                 activeTab === "cart"
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-foreground/20 text-foreground hover:border-foreground/40"
+                  ? "btn-glass"
+                  : "btn-glass-ghost"
               }`}
             >
               ЗАКАЗ
               {items.length > 0 && (
-                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-foreground text-background text-[10px] font-bold flex items-center justify-center border-2 border-background">
+                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shadow-[0_0_10px_hsl(var(--primary)/0.5)]">
                   {items.length}
                 </span>
               )}
@@ -146,19 +146,19 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                   {items.map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between gap-3 drawn-border px-3 py-2 rounded-xl"
+                      className="flex items-center justify-between gap-3 glass-card px-3 py-2 rounded-xl"
                     >
                       <span className="font-body text-sm flex-1">{item.name}</span>
                       <span className="font-heading text-sm whitespace-nowrap">{item.price}</span>
                       <button
                         onClick={() => removeItem(i)}
-                        className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                        className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-destructive/20 hover:text-destructive transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
                       </button>
                     </div>
                   ))}
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-foreground/10">
+                  <div className="flex justify-between items-center pt-2 border-t border-foreground/10">
                     <span className="font-heading text-sm">ИТОГО</span>
                     <span className="font-heading text-xl">{total.toLocaleString("ru-RU")}</span>
                   </div>
@@ -174,7 +174,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                       <PopoverTrigger asChild>
                         <button
                           className={cn(
-                            "w-full drawn-input flex items-center gap-2 text-left",
+                            "w-full glass-input flex items-center gap-2 text-left",
                             !selectedDate && "text-muted-foreground"
                           )}
                         >
@@ -203,7 +203,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                       <select
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        className="w-full drawn-input pl-9 appearance-none cursor-pointer"
+                        className="w-full glass-input pl-9 appearance-none cursor-pointer"
                       >
                         <option value="">Выбери время</option>
                         {WORK_HOURS.map((t) => (
@@ -232,7 +232,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full drawn-input"
+                className="w-full glass-input"
                 placeholder="Как тебя зовут?"
               />
             </div>
@@ -244,7 +244,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                 required
                 value={form.contact}
                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                className="w-full drawn-input"
+                className="w-full glass-input"
                 placeholder="@username или +7..."
               />
             </div>
@@ -255,7 +255,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                 <textarea
                   value={form.interest}
                   onChange={(e) => setForm({ ...form, interest: e.target.value })}
-                  className="w-full drawn-input min-h-[80px] resize-none"
+                  className="w-full glass-input min-h-[80px] resize-none"
                   placeholder="Запись, сведение, мастеринг..."
                   rows={3}
                 />
@@ -265,7 +265,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
             <button
               type="submit"
               disabled={loading || (activeTab === "cart" && items.length === 0)}
-              className="btn-drawn font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto disabled:opacity-40"
+              className="btn-glass font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto disabled:opacity-40"
             >
               {loading
                 ? "ОТПРАВЛЯЕМ..."
