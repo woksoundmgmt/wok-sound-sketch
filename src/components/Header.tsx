@@ -15,13 +15,12 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-panel" style={{ borderRadius: "0 0 20px 20px" }}>
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
         <img
           src={woksoundLogo}
           alt="ВОК САУНД"
-          className="h-12 w-auto cursor-pointer mix-blend-multiply dark:mix-blend-screen"
-          style={{ background: "transparent" }}
+          className="h-12 w-auto cursor-pointer brightness-0 invert opacity-90"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
 
@@ -35,7 +34,7 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="hover:opacity-60 transition-opacity"
+              className="text-foreground/70 hover:text-foreground transition-colors duration-300"
             >
               {label}
             </button>
@@ -45,11 +44,11 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
         <div className="flex items-center gap-3">
           <button
             onClick={onCartClick}
-            className="relative w-10 h-10 rounded-full drawn-border flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+            className="relative w-10 h-10 rounded-full btn-glass-ghost flex items-center justify-center"
           >
             <ShoppingCart className="w-4 h-4" strokeWidth={2} />
             {items.length > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-foreground text-background text-[10px] font-bold flex items-center justify-center border-2 border-background">
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shadow-[0_0_10px_hsl(var(--primary)/0.5)]">
                 {items.length}
               </span>
             )}
@@ -57,7 +56,7 @@ const Header = ({ onBookClick, onCartClick }: HeaderProps) => {
 
           <button
             onClick={onBookClick}
-            className="btn-drawn px-5 py-2 font-heading text-sm tracking-wider"
+            className="btn-glass px-5 py-2 font-heading text-sm tracking-wider"
           >
             ЗАПИСАТЬСЯ
           </button>

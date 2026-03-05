@@ -6,7 +6,7 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20">
       <div className="container mx-auto px-4 text-center relative z-10">
-        <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-6 tracking-tight">
+        <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-6 tracking-tight bg-gradient-to-br from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
           ДЕЛАЕМ ЗВУК,
           <br />
           КОТОРЫЙ КАЧАЕТ
@@ -19,7 +19,7 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
 
         <button
           onClick={onBookClick}
-          className="btn-drawn font-heading text-lg md:text-xl px-10 py-5 tracking-wider"
+          className="btn-glass font-heading text-lg md:text-xl px-10 py-5 tracking-wider"
         >
           ЗАБРОНИРОВАТЬ ВРЕМЯ
         </button>
