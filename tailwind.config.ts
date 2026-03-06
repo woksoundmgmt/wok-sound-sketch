@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Manrope"', 'sans-serif'],
-        body: ['"Golos Text"', 'sans-serif'],
-        hand: ['"Golos Text"', 'sans-serif'],
+        heading: ['"Space Grotesk"', 'sans-serif'],
+        body: ['"Inter"', 'sans-serif'],
+        hand: ['"Inter"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,13 +51,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        glass: {
-          bg: "hsl(var(--glass-bg))",
-          border: "hsl(var(--glass-border))",
-          glow: "hsl(var(--glass-glow))",
-          accent: "hsl(var(--glass-accent))",
-          gold: "hsl(var(--glass-gold))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
