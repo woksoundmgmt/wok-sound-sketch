@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import {
   Accordion,
@@ -93,53 +92,52 @@ const PricesSection = () => {
   };
 
   return (
-    <section id="prices" className="py-20 relative">
-      {/* Glass section background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(250,60%,50%/0.04)] to-transparent pointer-events-none" />
+    <section id="prices" className="py-20 md:py-32 border-t border-border">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="flex items-baseline justify-between mb-16">
+          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl tracking-tight">
+            ЦЕНЫ
+          </h2>
+          <p className="label-text hidden md:block">
+            ЧЕСТНЫЙ ПРАЙС
+          </p>
+        </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <h2 className="font-heading text-4xl md:text-6xl text-center mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-          ЦЕНЫ
-        </h2>
-        <p className="font-hand text-xl text-center text-muted-foreground mb-14">
-          честный прайс без скрытых платежей
-        </p>
-
-        <div className="max-w-3xl mx-auto">
-          <Accordion type="multiple" className="space-y-3">
+        <div className="max-w-3xl">
+          <Accordion type="multiple" className="space-y-0">
             {priceCategories.map((cat, i) => (
               <AccordionItem
                 key={i}
                 value={`cat-${i}`}
-                className="glass-card px-5 overflow-hidden border-0"
+                className="border-b border-border px-0"
               >
-                <AccordionTrigger className="font-heading text-lg md:text-xl hover:no-underline py-5 text-foreground">
+                <AccordionTrigger className="font-heading text-sm md:text-base hover:no-underline py-5 text-foreground tracking-wider">
                   {cat.title}
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="space-y-3 pb-3">
+                  <div className="space-y-0 pb-4">
                     {cat.items.map((item, j) => (
                       <div
                         key={j}
-                        className="flex items-center justify-between gap-4 border-b border-foreground/5 pb-3 last:border-0"
+                        className="flex items-center justify-between gap-4 py-3 border-b border-border/50 last:border-0 group"
                       >
                         <div className="flex-1 min-w-0">
-                          <span className="font-body font-bold text-sm text-foreground">
+                          <span className="font-body font-medium text-sm text-foreground">
                             {item.name}
                           </span>
-                          <p className="font-hand text-base text-muted-foreground mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             {item.desc}
                           </p>
                         </div>
-                        <span className="font-heading text-lg text-foreground whitespace-nowrap">
+                        <span className="font-heading text-sm text-foreground whitespace-nowrap">
                           {item.price}
                         </span>
                         <button
                           onClick={() => handleAdd(item.name, item.price)}
-                          className="shrink-0 w-9 h-9 rounded-full border border-foreground/10 flex items-center justify-center hover:bg-primary/20 hover:border-primary/30 hover:shadow-[0_0_12px_hsl(var(--primary)/0.2)] transition-all duration-300"
+                          className="shrink-0 w-8 h-8 border border-border flex items-center justify-center hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-200"
                           title={`Добавить ${item.name}`}
                         >
-                          <ShoppingCart className="w-3.5 h-3.5" strokeWidth={2} />
+                          <ShoppingCart className="w-3.5 h-3.5" strokeWidth={1.5} />
                         </button>
                       </div>
                     ))}
