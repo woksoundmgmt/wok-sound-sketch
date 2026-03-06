@@ -80,54 +80,53 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
     <>
       {open && (
         <div
-          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md"
+          className="fixed inset-0 z-[60] bg-foreground/40 backdrop-blur-sm"
           onClick={onClose}
         />
       )}
 
       <div
-        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md glass-panel-strong transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-background border-l border-border transform transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
-        style={{ borderRadius: "24px 0 0 24px" }}
       >
-        <div className="flex flex-col h-full p-6 overflow-y-auto">
+        <div className="flex flex-col h-full p-6 md:p-8 overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-heading text-2xl">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-heading text-lg tracking-wider">
               {activeTab === "cart" ? "КОРЗИНА" : "СВЯЗАТЬСЯ"}
             </h2>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full btn-glass-ghost flex items-center justify-center"
+              className="w-8 h-8 flex items-center justify-center hover:opacity-50 transition-opacity"
             >
-              <X className="w-4 h-4" strokeWidth={2.5} />
+              <X className="w-4 h-4" strokeWidth={1.5} />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-0 mb-8 border border-border">
             <button
               onClick={() => setTab("contact")}
-              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider transition-all duration-300 ${
+              className={`flex-1 py-2.5 font-heading text-[10px] tracking-widest transition-all duration-200 ${
                 activeTab === "contact"
-                  ? "btn-glass"
-                  : "btn-glass-ghost"
+                  ? "bg-foreground text-background"
+                  : "bg-background text-foreground hover:bg-muted"
               }`}
             >
               СВЯЗАТЬСЯ
             </button>
             <button
               onClick={() => setTab("cart")}
-              className={`flex-1 py-2.5 rounded-xl font-heading text-xs tracking-wider transition-all duration-300 relative ${
+              className={`flex-1 py-2.5 font-heading text-[10px] tracking-widest transition-all duration-200 relative ${
                 activeTab === "cart"
-                  ? "btn-glass"
-                  : "btn-glass-ghost"
+                  ? "bg-foreground text-background"
+                  : "bg-background text-foreground hover:bg-muted"
               }`}
             >
               ЗАКАЗ
               {items.length > 0 && (
-                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shadow-[0_0_10px_hsl(var(--primary)/0.5)]">
+                <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-foreground text-background text-[9px] font-bold flex items-center justify-center border border-background">
                   {items.length}
                 </span>
               )}
@@ -136,30 +135,30 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
 
           {/* Cart items */}
           {activeTab === "cart" && (
-            <div className="mb-4">
+            <div className="mb-6">
               {items.length === 0 ? (
-                <p className="font-hand text-lg text-muted-foreground text-center py-8">
+                <p className="text-sm text-muted-foreground text-center py-8">
                   Корзина пуста — добавь услуги из прайса
                 </p>
               ) : (
-                <div className="space-y-2 mb-4">
+                <div className="space-y-0 mb-6">
                   {items.map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between gap-3 glass-card px-3 py-2 rounded-xl"
+                      className="flex items-center justify-between gap-3 py-3 border-b border-border"
                     >
                       <span className="font-body text-sm flex-1">{item.name}</span>
                       <span className="font-heading text-sm whitespace-nowrap">{item.price}</span>
                       <button
                         onClick={() => removeItem(i)}
-                        className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-destructive/20 hover:text-destructive transition-colors"
+                        className="shrink-0 w-7 h-7 flex items-center justify-center hover:text-destructive transition-colors"
                       >
-                        <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+                        <Trash2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                       </button>
                     </div>
                   ))}
-                  <div className="flex justify-between items-center pt-2 border-t border-foreground/10">
-                    <span className="font-heading text-sm">ИТОГО</span>
+                  <div className="flex justify-between items-center pt-4">
+                    <span className="font-heading text-xs tracking-widest">ИТОГО</span>
                     <span className="font-heading text-xl">{total.toLocaleString("ru-RU")}</span>
                   </div>
                 </div>
@@ -167,14 +166,14 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
 
               {/* Date & Time pickers */}
               {items.length > 0 && (
-                <div className="space-y-4 mb-4">
+                <div className="space-y-4 mb-6">
                   <div>
-                    <label className="font-heading text-xs mb-2 block tracking-wider">ДАТА ЗАПИСИ</label>
+                    <label className="label-text mb-2 block">ДАТА ЗАПИСИ</label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <button
                           className={cn(
-                            "w-full glass-input flex items-center gap-2 text-left",
+                            "w-full editorial-input flex items-center gap-2 text-left",
                             !selectedDate && "text-muted-foreground"
                           )}
                         >
@@ -197,13 +196,13 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                   </div>
 
                   <div>
-                    <label className="font-heading text-xs mb-2 block tracking-wider">ВРЕМЯ</label>
+                    <label className="label-text mb-2 block">ВРЕМЯ</label>
                     <div className="relative flex items-center">
-                      <Clock className="absolute left-3 w-4 h-4 text-muted-foreground pointer-events-none shrink-0" />
+                      <Clock className="absolute left-0 w-4 h-4 text-muted-foreground pointer-events-none shrink-0" />
                       <select
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        className="w-full glass-input pl-9 appearance-none cursor-pointer"
+                        className="w-full editorial-input pl-6 appearance-none cursor-pointer"
                       >
                         <option value="">Выбери время</option>
                         {WORK_HOURS.map((t) => (
@@ -219,43 +218,43 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
 
           {/* Contact info */}
           {activeTab === "contact" && (
-            <p className="font-hand text-lg text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground mb-6">
               Заполни форму и мы свяжемся с тобой
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-6">
             <div>
-              <label className="font-heading text-xs mb-2 block tracking-wider">ТВОЕ ИМЯ</label>
+              <label className="label-text mb-2 block">ТВОЕ ИМЯ</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full glass-input"
+                className="w-full editorial-input"
                 placeholder="Как тебя зовут?"
               />
             </div>
 
             <div>
-              <label className="font-heading text-xs mb-2 block tracking-wider">TELEGRAM ИЛИ ТЕЛЕФОН</label>
+              <label className="label-text mb-2 block">TELEGRAM ИЛИ ТЕЛЕФОН</label>
               <input
                 type="text"
                 required
                 value={form.contact}
                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                className="w-full glass-input"
+                className="w-full editorial-input"
                 placeholder="@username или +7..."
               />
             </div>
 
             {activeTab === "contact" && (
               <div>
-                <label className="font-heading text-xs mb-2 block tracking-wider">ЧТО ВАС ИНТЕРЕСУЕТ</label>
+                <label className="label-text mb-2 block">ЧТО ВАС ИНТЕРЕСУЕТ</label>
                 <textarea
                   value={form.interest}
                   onChange={(e) => setForm({ ...form, interest: e.target.value })}
-                  className="w-full glass-input min-h-[80px] resize-none"
+                  className="w-full editorial-input min-h-[80px] resize-none"
                   placeholder="Запись, сведение, мастеринг..."
                   rows={3}
                 />
@@ -265,7 +264,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
             <button
               type="submit"
               disabled={loading || (activeTab === "cart" && items.length === 0)}
-              className="btn-glass font-heading text-base px-6 py-4 tracking-wider text-center w-full mt-auto disabled:opacity-40"
+              className="btn-primary text-xs px-6 py-4 tracking-widest text-center w-full mt-auto disabled:opacity-30"
             >
               {loading
                 ? "ОТПРАВЛЯЕМ..."
@@ -275,7 +274,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
             </button>
           </form>
 
-          <p className="font-hand text-base text-muted-foreground mt-4 text-center">
+          <p className="text-xs text-muted-foreground mt-4 text-center">
             Ответим в течение пары часов
           </p>
         </div>

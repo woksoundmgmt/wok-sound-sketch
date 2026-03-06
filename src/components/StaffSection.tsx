@@ -39,23 +39,25 @@ const categories = [
 
 const StaffSection = () => {
   return (
-    <section id="staff" className="py-20">
-      <div className="container mx-auto px-4">
-        <h2 className="font-heading text-4xl md:text-6xl text-center mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-          НАШ СТАФФ
-        </h2>
-        <p className="font-hand text-xl text-center text-muted-foreground mb-14">
-          оборудование, на котором делаем магию
-        </p>
+    <section id="staff" className="py-20 md:py-32 border-t border-border">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="flex items-baseline justify-between mb-16">
+          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl tracking-tight">
+            НАШ СТАФФ
+          </h2>
+          <p className="label-text hidden md:block">
+            ОБОРУДОВАНИЕ
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border max-w-5xl">
           {categories.map((cat) => (
-            <div key={cat.title} className="glass-card p-6">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 bg-accent/10 border border-accent/20">
-                <cat.icon className="w-5 h-5 text-accent" strokeWidth={2} />
+            <div key={cat.title} className="bg-background p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <cat.icon className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
+                <h3 className="label-text text-foreground">{cat.title}</h3>
               </div>
-              <h3 className="font-heading text-sm mb-3 tracking-wider">{cat.title}</h3>
-              <ul className="space-y-1.5">
+              <ul className="space-y-2">
                 {cat.items.map((item) => (
                   <li key={item} className="text-sm text-muted-foreground font-body">
                     {item}
