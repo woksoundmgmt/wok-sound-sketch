@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Trash2, CalendarIcon, Clock } from "lucide-react";
+import { X, Trash2, CalendarIcon, Clock, Zap } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
@@ -17,14 +17,18 @@ interface BookingDrawerProps {
 const TELEGRAM_BOT_TOKEN = "8738225501:AAH_TliE5iP30bQo9kWDCD791cUJPN3l2dQ";
 const TELEGRAM_CHAT_ID = "423749724";
 
-const WORK_HOURS = Array.from({ length: 13 }, (_, i) => {
-  const h = i + 10;
-  return `${h}:00`;
-});
+// All 24 hours
+const ALL_HOURS = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, "0")}:00`);
+
+// Night hours (22:00 - 09:00) = 22,23,0,1,2,3,4,5,6,7,8,9
+const isNightHour = (time: string): boolean => {
+  const h = parseInt(time.split(":")[0], 10);
+  return h >= 22 || h <= 9;
+};
 
 const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerProps) => {
   const { toast } = useToast();
-  const { items, removeItem, clearCart, total } = useCart();
+  const { items, removeItem, clearCart, finalTotal, urgent, setUrgent, nightSurcharge, setNightSurcharge } = useCart();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", contact: "", interest: "" });
   const [tab, setTab] = useState<"contact" | "cart">(initialTab);
@@ -32,6 +36,11 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
   const [selectedTime, setSelectedTime] = useState("");
 
   const activeTab = open ? (initialTab === "cart" ? "cart" : tab) : tab;
+
+  const handleTimeChange = (time: string) => {
+    setSelectedTime(time);
+    setNightSurcharge(isNightHour(time));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +53,10 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
       const servicesList = items.map((i) => `  - ${i.name}: ${i.price}`).join("\n");
       const dateStr = selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: ru }) : "не указана";
       const timeStr = selectedTime || "не указано";
-      text = `Заказ услуг — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\n\nДата: ${dateStr}\nВремя: ${timeStr}\n\nУслуги:\n${servicesList}\n\nИтого: ${total.toLocaleString("ru-RU")}`;
+      const extras: string[] = [];
+      if (urgent) extras.push("Срочный проект (+20%)");
+      if (nightSurcharge) extras.push("Ночное время (+20%)");
+      text = `Заказ услуг — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\n\nДата: ${dateStr}\nВремя: ${timeStr}\n${extras.length > 0 ? `Доп.: ${extras.join(", ")}\n` : ""}\nУслуги:\n${servicesList}\n\nИтого: ${finalTotal.toLocaleString("ru-RU")}`;
     } else {
       text = `Новая заявка — ВОК САУНД\n\nИмя: ${form.name}\nКонтакт: ${form.contact}\nИнтересует: ${form.interest || "не указано"}`;
     }
@@ -157,9 +169,35 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                       </button>
                     </div>
                   ))}
+
+                  {/* Urgent toggle */}
+                  <button
+                    onClick={() => setUrgent(!urgent)}
+                    className={cn(
+                      "w-full flex items-center justify-between gap-3 py-3 border-b border-border transition-colors duration-200",
+                      urgent ? "text-foreground" : "text-muted-foreground"
+                    )}
+                  >
+                    <span className="flex items-center gap-2 font-body text-sm">
+                      <Zap className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      Срочный проект
+                    </span>
+                    <span className="font-heading text-sm">
+                      {urgent ? "ВКЛ +20%" : "+20%"}
+                    </span>
+                  </button>
+
+                  {/* Night surcharge info */}
+                  {nightSurcharge && (
+                    <div className="flex items-center justify-between gap-3 py-3 border-b border-border text-muted-foreground">
+                      <span className="font-body text-sm">Ночное время (22:00–09:00)</span>
+                      <span className="font-heading text-sm">+20%</span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center pt-4">
                     <span className="font-heading text-xs tracking-widest">ИТОГО</span>
-                    <span className="font-heading text-xl">{total.toLocaleString("ru-RU")}</span>
+                    <span className="font-heading text-xl">{finalTotal.toLocaleString("ru-RU")}</span>
                   </div>
                 </div>
               )}
@@ -197,16 +235,18 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
 
                   <div>
                     <label className="label-text mb-2 block">ВРЕМЯ</label>
-                    <div className="relative flex items-center">
-                      <Clock className="absolute left-0 w-4 h-4 text-muted-foreground pointer-events-none shrink-0" />
+                    <div className="relative">
+                      <Clock className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                       <select
                         value={selectedTime}
-                        onChange={(e) => setSelectedTime(e.target.value)}
-                        className="w-full editorial-input pl-6 appearance-none cursor-pointer"
+                        onChange={(e) => handleTimeChange(e.target.value)}
+                        className="w-full editorial-input pl-6 appearance-none cursor-pointer bg-transparent"
                       >
                         <option value="">Выбери время</option>
-                        {WORK_HOURS.map((t) => (
-                          <option key={t} value={t}>{t}</option>
+                        {ALL_HOURS.map((t) => (
+                          <option key={t} value={t}>
+                            {t}{isNightHour(t) ? " (+20%)" : ""}
+                          </option>
                         ))}
                       </select>
                     </div>

@@ -21,7 +21,7 @@ const FooterSection = () => {
               className="flex items-start gap-3 text-background/60 hover:text-background transition-colors duration-200"
             >
               <MapPin className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              ул. Героя Владислава Посадского, 42
+              Краснодар, Россия
             </a>
 
             <a href="tel:+79964394808" className="flex items-center gap-3 text-background/60 hover:text-background transition-colors duration-200">

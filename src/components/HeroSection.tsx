@@ -1,3 +1,4 @@
+import { Send, MapPin } from "lucide-react";
 import studioPhoto from "@/assets/studio-photo.jpg";
 
 interface HeroProps {
@@ -15,7 +16,6 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
             alt="WOK SOUND Studio"
             className="absolute inset-0 w-full h-full object-cover opacity-80"
           />
-          {/* Small labels on top of image */}
           <div className="absolute top-6 left-6 md:top-10 md:left-10">
             <p className="text-[9px] font-heading font-bold tracking-[0.2em] text-white/60 uppercase">
               СТУДИЯ:
@@ -39,7 +39,7 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
             <div>
               <p className="label-text mb-1">ЛОКАЦИЯ:</p>
               <p className="font-heading text-[10px] tracking-wider">
-                САРАТОВ, РОССИЯ
+                КРАСНОДАР, РОССИЯ
               </p>
             </div>
             <div className="text-right">
@@ -70,13 +70,44 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
               для трека, который добавят в плейлист.
             </p>
 
-            <div>
+            <div className="flex items-center gap-4 flex-wrap">
               <button
                 onClick={onBookClick}
                 className="btn-primary text-xs px-8 py-4 tracking-widest"
               >
                 ЗАБРОНИРОВАТЬ ВРЕМЯ
               </button>
+            </div>
+
+            {/* Social links */}
+            <div className="flex items-center gap-6 mt-8">
+              <a
+                href="https://t.me/woksound23"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs font-heading tracking-wider"
+              >
+                <Send className="w-3.5 h-3.5" strokeWidth={1.5} />
+                TELEGRAM
+              </a>
+              <a
+                href="https://www.twitch.tv/woksound23"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs font-heading tracking-wider"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+                TWITCH
+              </a>
+              <a
+                href="https://yandex.ru/profile/35531174003"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs font-heading tracking-wider"
+              >
+                <MapPin className="w-3.5 h-3.5" strokeWidth={1.5} />
+                КАРТЫ
+              </a>
             </div>
           </div>
 
