@@ -34,17 +34,31 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
   const [tab, setTab] = useState<"contact" | "cart">(initialTab);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const activeTab = open ? (initialTab === "cart" ? "cart" : tab) : tab;
 
   const handleTimeChange = (time: string) => {
     setSelectedTime(time);
     setNightSurcharge(isNightHour(time));
+    setErrors((prev) => ({ ...prev, time: "" }));
+  };
+
+  const validate = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    if (!form.name.trim()) newErrors.name = "Укажи имя";
+    if (!form.contact.trim()) newErrors.contact = "Укажи контакт";
+    if (activeTab === "cart" && items.length > 0) {
+      if (!selectedDate) newErrors.date = "Выбери дату";
+      if (!selectedTime) newErrors.time = "Выбери время";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.contact) return;
+    if (!validate()) return;
 
     setLoading(true);
 
@@ -71,6 +85,7 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
       setForm({ name: "", contact: "", interest: "" });
       setSelectedDate(undefined);
       setSelectedTime("");
+      setErrors({});
       if (activeTab === "cart") clearCart();
       onClose();
       toast({
@@ -212,7 +227,8 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                         <button
                           className={cn(
                             "w-full editorial-input flex items-center gap-2 text-left",
-                            !selectedDate && "text-muted-foreground"
+                            !selectedDate && "text-muted-foreground",
+                            errors.date && "border-destructive"
                           )}
                         >
                           <CalendarIcon className="w-4 h-4 shrink-0" />
@@ -225,31 +241,56 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
                         <Calendar
                           mode="single"
                           selected={selectedDate}
-                          onSelect={setSelectedDate}
+                          onSelect={(d) => {
+                            setSelectedDate(d);
+                            setErrors((prev) => ({ ...prev, date: "" }));
+                          }}
                           disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                           className={cn("p-3 pointer-events-auto")}
                         />
                       </PopoverContent>
                     </Popover>
+                    {errors.date && <p className="text-xs text-destructive mt-1">{errors.date}</p>}
                   </div>
 
                   <div>
                     <label className="label-text mb-2 block">ВРЕМЯ</label>
-                    <div className="relative">
-                      <Clock className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                      <select
-                        value={selectedTime}
-                        onChange={(e) => handleTimeChange(e.target.value)}
-                        className="w-full editorial-input pl-6 appearance-none cursor-pointer bg-transparent"
-                      >
-                        <option value="">Выбери время</option>
-                        {ALL_HOURS.map((t) => (
-                          <option key={t} value={t}>
-                            {t}{isNightHour(t) ? " (+20%)" : ""}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          className={cn(
+                            "w-full editorial-input flex items-center gap-2 text-left",
+                            !selectedTime && "text-muted-foreground",
+                            errors.time && "border-destructive"
+                          )}
+                        >
+                          <Clock className="w-4 h-4 shrink-0" />
+                          {selectedTime
+                            ? `${selectedTime}${isNightHour(selectedTime) ? " (ночное +20%)" : ""}`
+                            : "Выбери время"}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 z-[80] max-h-60 overflow-y-auto" align="start">
+                        <div className="grid grid-cols-4 gap-1 p-3">
+                          {ALL_HOURS.map((t) => (
+                            <button
+                              key={t}
+                              onClick={() => handleTimeChange(t)}
+                              className={cn(
+                                "py-2 px-3 text-xs font-heading tracking-wider rounded-sm transition-colors",
+                                selectedTime === t
+                                  ? "bg-foreground text-background"
+                                  : "hover:bg-muted",
+                                isNightHour(t) && selectedTime !== t && "text-muted-foreground"
+                              )}
+                            >
+                              {t}
+                            </button>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    {errors.time && <p className="text-xs text-destructive mt-1">{errors.time}</p>}
                   </div>
                 </div>
               )}
@@ -268,24 +309,30 @@ const BookingDrawer = ({ open, onClose, initialTab = "contact" }: BookingDrawerP
               <label className="label-text mb-2 block">ТВОЕ ИМЯ</label>
               <input
                 type="text"
-                required
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full editorial-input"
+                onChange={(e) => {
+                  setForm({ ...form, name: e.target.value });
+                  setErrors((prev) => ({ ...prev, name: "" }));
+                }}
+                className={cn("w-full editorial-input", errors.name && "border-destructive")}
                 placeholder="Как тебя зовут?"
               />
+              {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
             </div>
 
             <div>
               <label className="label-text mb-2 block">TELEGRAM ИЛИ ТЕЛЕФОН</label>
               <input
                 type="text"
-                required
                 value={form.contact}
-                onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                className="w-full editorial-input"
+                onChange={(e) => {
+                  setForm({ ...form, contact: e.target.value });
+                  setErrors((prev) => ({ ...prev, contact: "" }));
+                }}
+                className={cn("w-full editorial-input", errors.contact && "border-destructive")}
                 placeholder="@username или +7..."
               />
+              {errors.contact && <p className="text-xs text-destructive mt-1">{errors.contact}</p>}
             </div>
 
             {activeTab === "contact" && (
