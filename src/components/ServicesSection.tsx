@@ -6,28 +6,43 @@ const services = [
     title: "ЗАПИСЬ",
     description: "Чистый сигнал, ламповый преамп, уютная атмосфера. Пишем вокал, инструменты, подкасты — что угодно.",
     num: "01",
+    priceAccordion: 0, // index in priceCategories
   },
   {
     icon: SlidersHorizontal,
     title: "СВЕДЕНИЕ",
     description: "Собираем хаос в трек. Баланс, панорама, эффекты — каждый звук на своем месте.",
     num: "02",
+    priceAccordion: 2,
   },
   {
     icon: Disc3,
     title: "МАСТЕРИНГ",
     description: "Финальная полировка. Громко, чисто, мощно — готово для стриминга и винила.",
     num: "03",
+    priceAccordion: 2,
   },
   {
     icon: Globe,
     title: "ДИСТРИБУЦИЯ",
     description: "Выкладываем на все площадки: Spotify, Apple Music, Яндекс Музыка. Один клик — весь мир.",
     num: "04",
+    priceAccordion: 5,
   },
 ];
 
 const ServicesSection = () => {
+  const handleServiceClick = (accordionIndex: number) => {
+    const pricesSection = document.getElementById("prices");
+    if (pricesSection) {
+      pricesSection.scrollIntoView({ behavior: "smooth" });
+      // Wait for scroll, then open accordion
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("open-price-accordion", { detail: accordionIndex }));
+      }, 600);
+    }
+  };
+
   return (
     <section id="services" className="py-20 md:py-32 border-t border-border">
       <div className="container mx-auto px-4 md:px-8">
@@ -44,7 +59,8 @@ const ServicesSection = () => {
           {services.map((service) => (
             <div
               key={service.title}
-              className="bg-background p-6 md:p-8 group hover:bg-foreground hover:text-background transition-colors duration-300"
+              onClick={() => handleServiceClick(service.priceAccordion)}
+              className="bg-background p-6 md:p-8 group hover:bg-foreground hover:text-background transition-colors duration-300 cursor-pointer"
             >
               <div className="flex items-baseline justify-between mb-8">
                 <span className="label-text group-hover:text-background/50 transition-colors">{service.num}</span>

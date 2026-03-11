@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 import {
   Accordion,
@@ -10,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const priceCategories = [
   {
-    title: "БАЗОВЫЕ УСЛУГИ",
+    title: "ЗАПИСЬ",
     items: [
       { name: "Запись 1 час", price: "800", desc: "Одна часовая сессия в студии с инженером" },
       { name: "Запись 2 часа", price: "1 200", desc: "Расширенная сессия — хватит на пару дублей" },
@@ -42,11 +43,9 @@ const priceCategories = [
     ],
   },
   {
-    title: "ТЕКСТ И ТОПЛАЙН",
+    title: "ТЕКСТ",
     items: [
       { name: "Написание текста", price: "500", desc: "Текст по вашему брифу или теме" },
-      { name: "Топлайн", price: "1 200", desc: "Мелодия и подача под готовый бит" },
-      { name: "Песня с нуля", price: "3 000", desc: "Текст + топлайн + структура трека" },
     ],
   },
   {
@@ -54,7 +53,6 @@ const priceCategories = [
     items: [
       { name: "Тюнинг вокала", price: "600", desc: "Автотюн или ручная коррекция pitch" },
       { name: "Бэк-вокал / адлибы", price: "500", desc: "Запись и обработка бэков" },
-      { name: "Срочный проект", price: "+20%", desc: "Ускоренные сроки — приоритет в очереди" },
       { name: "Подготовка к площадкам", price: "200", desc: "Форматирование под требования дистрибьюторов" },
       { name: "Дистрибуция", price: "500", desc: "Релиз на всех площадках мира" },
     ],
@@ -72,6 +70,17 @@ const priceCategories = [
 const PricesSection = () => {
   const { addItem } = useCart();
   const { toast } = useToast();
+  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const index = (e as CustomEvent).detail as number;
+      const value = `cat-${index}`;
+      setOpenAccordions((prev) => (prev.includes(value) ? prev : [...prev, value]));
+    };
+    window.addEventListener("open-price-accordion", handler);
+    return () => window.removeEventListener("open-price-accordion", handler);
+  }, []);
 
   const handleAdd = (name: string, price: string) => {
     addItem({ name, price });
@@ -104,7 +113,12 @@ const PricesSection = () => {
         </div>
 
         <div className="max-w-3xl">
-          <Accordion type="multiple" className="space-y-0">
+          <Accordion
+            type="multiple"
+            className="space-y-0"
+            value={openAccordions}
+            onValueChange={setOpenAccordions}
+          >
             {priceCategories.map((cat, i) => (
               <AccordionItem
                 key={i}
