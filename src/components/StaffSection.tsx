@@ -50,7 +50,7 @@ const categories = [
 ];
 
 const StaffSection = () => {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(staffSoundcard);
 
   return (
     <section id="staff" className="py-20 md:py-32 border-t border-border">
@@ -69,13 +69,12 @@ const StaffSection = () => {
             {categories.map((cat) => (
               <div
                 key={cat.title}
-                className="bg-background p-6 md:p-8 cursor-pointer group transition-colors duration-200 hover:bg-muted/30"
+                className="bg-background p-6 md:p-8 cursor-pointer group transition-colors duration-150 hover:bg-muted/30"
                 onMouseEnter={() => cat.image && setActiveImage(cat.image)}
-                onMouseLeave={() => setActiveImage(null)}
-                onClick={() => cat.image && setActiveImage(prev => prev === cat.image ? null : cat.image)}
+                onClick={() => cat.image && setActiveImage(cat.image)}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <cat.icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.5} />
+                  <cat.icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-150" strokeWidth={1.5} />
                   <h3 className="label-text text-foreground">{cat.title}</h3>
                 </div>
                 <ul className="space-y-2">
@@ -89,22 +88,27 @@ const StaffSection = () => {
             ))}
           </div>
 
-          {/* Preview image */}
+          {/* Preview image — desktop */}
           <div className="hidden lg:block relative">
             <div className="sticky top-20 aspect-[3/4] bg-muted/20 border border-border overflow-hidden">
-              {activeImage ? (
-                <img
-                  src={activeImage}
-                  alt="Оборудование студии"
-                  className="w-full h-full object-cover transition-opacity duration-300"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <p className="label-text text-muted-foreground text-center px-4">
-                    НАВЕДИ НА КАТЕГОРИЮ
-                  </p>
-                </div>
-              )}
+              <img
+                key={activeImage}
+                src={activeImage || staffSoundcard}
+                alt="Оборудование студии"
+                className="w-full h-full object-cover animate-fade-in"
+              />
+            </div>
+          </div>
+
+          {/* Preview image — mobile (shown below grid) */}
+          <div className="lg:hidden">
+            <div className="aspect-[4/3] bg-muted/20 border border-border overflow-hidden">
+              <img
+                key={activeImage}
+                src={activeImage || staffSoundcard}
+                alt="Оборудование студии"
+                className="w-full h-full object-cover animate-fade-in"
+              />
             </div>
           </div>
         </div>

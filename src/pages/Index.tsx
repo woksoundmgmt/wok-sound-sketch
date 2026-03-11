@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { CartProvider } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -21,6 +21,26 @@ const Index = () => {
     return () => window.removeEventListener("open-cart", handler);
   }, []);
 
+  // Scroll reveal observer
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const setupObserver = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    node.querySelectorAll(".scroll-reveal").forEach((el) => {
+      observerRef.current!.observe(el);
+    });
+  }, []);
+
   const openContact = () => {
     setDrawerTab("contact");
     setDrawerOpen(true);
@@ -33,13 +53,13 @@ const Index = () => {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-screen bg-background text-foreground" ref={setupObserver}>
         <Header onBookClick={openContact} onCartClick={openCart} />
         <HeroSection onBookClick={openContact} />
-        <ServicesSection />
-        <StaffSection />
-        <PricesSection />
-        <FooterSection />
+        <div className="scroll-reveal"><ServicesSection /></div>
+        <div className="scroll-reveal"><StaffSection /></div>
+        <div className="scroll-reveal"><PricesSection /></div>
+        <div className="scroll-reveal"><FooterSection /></div>
         <BookingDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}

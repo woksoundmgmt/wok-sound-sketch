@@ -7,7 +7,7 @@ const FooterSection = () => {
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div>
-            <img src={woksoundLogo} alt="ВОК САУНД" className="h-16 w-auto mb-8 brightness-0 invert" />
+            <img src={woksoundLogo} alt="ВОК САУНД" className="h-20 w-auto mb-8" />
             <p className="font-body text-sm text-background/60 max-w-sm leading-relaxed">
               Андеграунд-студия для тех, кто делает музыку всерьез. Никакой попсы в подходе — только результат.
             </p>
@@ -21,7 +21,7 @@ const FooterSection = () => {
               className="flex items-start gap-3 text-background/60 hover:text-background transition-colors duration-200"
             >
               <MapPin className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              Краснодар, Россия
+              Краснодар, Россия, ул. Владислава Посадского 42
             </a>
 
             <a href="tel:+79964394808" className="flex items-center gap-3 text-background/60 hover:text-background transition-colors duration-200">

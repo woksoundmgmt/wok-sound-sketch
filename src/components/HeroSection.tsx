@@ -57,11 +57,11 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
             <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] tracking-tight mb-8">
               ДЕЛАЕМ
               <br />
-              ЗВУК,
+              ЗВУК
               <br />
               КОТОРЫЙ
               <br />
-              КАЧАЕТ.
+              КАЧАЕТ
             </h1>
 
             <p className="font-body text-sm md:text-base text-muted-foreground max-w-md leading-relaxed mb-10">
