@@ -55,13 +55,11 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
           {/* Main headline */}
           <div className="flex-1 flex flex-col justify-center">
             <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] tracking-tight mb-8">
-              ДЕЛАЕМ
+              МЫ ГОТОВЫ
               <br />
-              ЗВУК
+              ВАС
               <br />
-              КОТОРЫЙ
-              <br />
-              КАЧАЕТ
+              ВЫСЛУШАТЬ
             </h1>
 
             <p className="font-body text-sm md:text-base text-muted-foreground max-w-md leading-relaxed mb-10">
