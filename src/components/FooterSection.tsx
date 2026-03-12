@@ -15,7 +15,7 @@ const FooterSection = () => {
 
           <div className="space-y-4 font-body text-sm">
             <a
-              href="https://yandex.ru/maps/?text=улица+Героя+Владислава+Посадского+42"
+              href="https://yandex.com/profile/35531174003?intent=reviews"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 text-background/60 hover:text-background transition-colors duration-200"
