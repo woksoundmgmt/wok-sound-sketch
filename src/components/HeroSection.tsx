@@ -96,7 +96,7 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
                 TWITCH
               </a>
               <a
-                href="https://yandex.ru/profile/35531174003"
+                href="https://yandex.com/profile/35531174003?intent=reviews"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs font-heading tracking-wider"
