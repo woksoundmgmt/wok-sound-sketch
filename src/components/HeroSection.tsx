@@ -23,11 +23,9 @@ const HeroSection = ({ onBookClick }: HeroProps) => {
               <span className="text-white/90">ВОК САУНД</span>
             </p>
           </div>
-          <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 max-w-[200px]">
+          <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 max-w-[250px]">
             <p className="text-[9px] font-heading font-bold tracking-[0.15em] text-white/70 uppercase leading-relaxed">
-              ЗАПИСЬ. СВЕДЕНИЕ.
-              <br />
-              МАСТЕРИНГ. ДИСТРИБУЦИЯ.
+              ДЕЛАЕМ ЗВУК КОТОРЫЙ КАЧАЕТ
             </p>
           </div>
         </div>
